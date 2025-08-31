@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+    <!-- Basic meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMP519 REST API Interface</title>
+    
+    <!-- Embedded CSS for the interface styling -->
+    <style>
+        /* Main body styling with centered content and readable typography */
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 50em;  /* Responsive max-width */
+            margin: 0 auto;   /* Center the content */
+            padding: 1.25em;  /* 20px equivalent in em */
+            line-height: 1.5; /* Improved readability */
+        }
+        
+        /* Control panel styling with light gray background */
+        article.control-panel { 
+            background: #f5f5f5;  /* Light gray background */
+            padding: 1.25em;
+            border-radius: 0.3125em; /* 5px equivalent */
+            margin-bottom: 1.25em;
+        }
+        
+        /* Response area styling with bordered container */
+        section.response-area { 
+            border: 0.0625em solid #ddd; /* 1px border */
+            padding: 0.9375em;  /* 15px equivalent */
+            border-radius: 0.3125em;
+            margin-bottom: 1.25em;
+            min-height: 6.25em; /* 100px minimum height */
+        }
+        
+        /* Consistent form control styling */
+        select, input, textarea, button { 
+            width: 100%;  /* Full width elements */
+            padding: 0.5em;
+            margin: 0.3125em 0; /* 5px top/bottom margin */
+            box-sizing: border-box; /* Proper sizing */
+            font-size: 1em; /* Base font size */
+        }
+        
+        /* Special textarea styling for JSON input */
+        textarea { 
+            height: 9.375em; /* 150px height */
+            font-family: monospace; /* Better for JSON */
+        }
+        
+        /* Primary button styling */
+        button { 
+            background: #4CAF50; /* Green color */
+            color: white; 
+            border: none;
+            padding: 0.625em; /* 10px equivalent */
+            font-size: 1em;
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+        
+        /* Button hover states */
+        button:hover { background: #45a049; } /* Darker green */
+        button.clear-btn { 
+            background: #f44336; /* Red color */
+            margin-top: 0.625em;
+        }
+        button.clear-btn:hover { background: #d32f2f; } /* Darker red */
+        
+        /* Response formatting */
+        pre { white-space: pre-wrap; /* Preserve formatting but wrap */
+        }
+        code { 
+            background: #f5f5f5; /* Light gray background */
+            padding: 0.125em 0.25em; /* Tight padding */
+            border-radius: 0.1875em; /* 3px rounded corners */
+            font-family: monospace; /* Code-like appearance */
+        }
+        
+        /* Heading hierarchy styling */
+        h1 { font-size: 1.75em; margin-bottom: 0.75em; } /* 28px */
+        h2 { font-size: 1.5em; margin: 1em 0 0.75em; }   /* 24px */
+        h3 { font-size: 1.25em; margin: 1em 0 0.75em; }  /* 20px */
+    </style>
+</head>
+<body>
+    <!-- Main page heading -->
+    <h1>COMP519 REST API Tester</h1>
+    
+    <!-- Control panel section containing all input controls -->
+    <article class="control-panel">
+        <!-- HTTP Method selection dropdown -->
+        <label for="method">HTTP Method:</label>
+        <select id="method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+        </select>
+        
+        <!-- Resource path input -->
+        <label for="path">Resource Path (e.g., <code>teams/1/players</code>):</label>
+        <input type="text" id="path" placeholder="teams" size="100">
+        
+        <!-- JSON request body input -->
+        <label for="body">Request Body (JSON):</label>
+        <textarea id="body" placeholder='{"surname":"Smith","given_names":"John","nationality":"English","date_of_birth":"1990-01-01"}' cols="100" rows="10"></textarea>
+        
+        <!-- Primary action button -->
+        <button id="send-btn">Send Request</button>
+    </article>
+    
+    <!-- Response status display area -->
+    <section class="response-area">
+        <h3>Response Status Code</h3>
+        <output id="status-code">-</output> <!-- Default dash when empty -->
+    </section>
+    
+    <!-- Response body display area -->
+    <section class="response-area">
+        <h3>Response Body</h3>
+        <pre id="response-body">-</pre> <!-- Pre-formatted text for JSON -->
+    </section>
+    
+    <!-- Clear button for resetting the display -->
+    <button id="clear-btn" class="clear-btn">Clear Response</button>
+    
+    <!-- API documentation section -->
+    <section name="description">
+        <h2>API Documentation</h2>
+        <dl> <!-- Definition list for API endpoints -->
+            <!-- Teams endpoint documentation -->
+            <dt>Request method for retrieving information on all teams</dt>
+            <dd>GET</dd>
+            <dt>Resource path for retrieving information on all teams</dt>
+            <dd>teams</dd>
+            
+            <!-- Team players endpoint documentation -->
+            <dt>Request method for retrieving information on all players of team {teamId}</dt>
+            <dd>GET</dd>
+            <dt>Resource path for retrieving information on all players of team {teamId}</dt>
+            <dd>teams/{teamId}/players</dd>    
+            
+            <!-- Specific player endpoint documentation -->
+            <dt>Request method for retrieving information on player {playerId} of team {teamId}</dt>
+            <dd>GET</dd>
+            <dt>Resource path for retrieving information on player {playerId} of team {teamId}</dt>
+            <dd>teams/{teamId}/players/{playerId}</dd>    
+            
+            <!-- Add player endpoint documentation -->
+            <dt>Request method for adding a player to team {teamId}</dt>
+            <dd>POST</dd>
+            <dt>Resource path for adding a player to team {teamId}</dt>
+            <dd>teams/{teamId}/players</dd>
+            <dt>Sample request body for adding a player to team {teamId}</dt>
+            <dd><code>{"surname":"Smith","given_names":"John","nationality":"English","date_of_birth":"1990-01-01"}</code></dd>
+            
+            <!-- Update player endpoint documentation -->
+            <dt>Request method for updating parts of the information on player {playerId} of team {teamId}</dt>
+            <dd>PATCH</dd>
+            <dt>Resource path for updating parts of the information on player {playerId} of team {teamId}</dt>
+            <dd>teams/{teamId}/players/{playerId}</dd>
+            <dt>Sample request body for updating parts of the information on player {playerId} of team {teamId}</dt>
+            <dd><code>{"nationality":"British"}</code></dd>
+            
+            <!-- Delete player endpoint documentation -->
+            <dt>Request method for deleting player {playerId} from team {teamId}</dt>
+            <dd>DELETE</dd>
+            <dt>Resource path for deleting player {playerId} from team {teamId}</dt>
+            <dd>teams/{teamId}/players/{playerId}</dd>
+        </dl>
+    </section>
+
+    <!-- JavaScript file that powers the interface functionality -->
+    <script src="interface.js"></script>
+</body>
+</html>
